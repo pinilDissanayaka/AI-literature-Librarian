@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from langchain_community.tools import TavilySearchResults
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.utilities import WikipediaAPIWrapper
+from langchain_community.tools import WikipediaQueryRun
 from langchain.tools import tool
 
 load_dotenv(find_dotenv(filename=".env"))
@@ -42,6 +44,36 @@ def web_search(search_quary: None, max_results=7, include_images=True):
         search_results = search.invoke(input=search_quary)
     except Exception as e:
         # Raise any exception encountered during the search
-        raise Exception(e)
+        raise Exception(e.args)
 
     return search_results
+
+
+@tool("Wikipedia Search tool")
+def wikipidia_search(query: str) -> list:
+    """
+    Perform a search on Wikipedia using the specified query.
+
+    Args:
+        query (str): The search query to perform on Wikipedia.
+
+    Returns:
+        list: A list of search results from Wikipedia.
+
+    Raises:
+        Exception: If any error occurs during the search.
+    """
+    try:
+        # Initialize the Wikipedia searcher with the specified query
+        wikipidia_searcher = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
+        
+        # Perform the search and get the results
+        wikipidia_search_result = wikipidia_searcher.invoke(input=query)
+        
+        # Return the search results
+        return wikipidia_search_result
+    except Exception as e:
+        # Raise any exception encountered during the search
+        raise ValueError(e.args)
+
+
