@@ -11,19 +11,37 @@ os.environ["TAVILY_API_KEY"]=os.getenv("TAVILY_API_KEY")
 
 
 @tool("Web Search tool")
-def web_search(search_quary:None,max_results=7, include_images=True):
-    if os.environ["TAVILY_API_KEY"] == None:
-        raise ValueError("Web search can not be perform that time.")
-    else:
-        try:
-            search=TavilySearchResults(
-                max_results=max_results,
-                include_images=include_images
-            )
+def web_search(search_quary: None, max_results=7, include_images=True):
+    """
+    Perform a web search using the TavilySearchResults tool.
 
-            search_results=search.invoke(input=search_quary)
-        except Exception as e:
-            raise Exception(e)
+    Args:
+        search_quary (None): The search query to perform.
+        max_results (int): Maximum number of results to retrieve. Defaults to 7.
+        include_images (bool): Whether to include images in the results. Defaults to True.
 
+    Returns:
+        list: A list of search results.
+
+    Raises:
+        ValueError: If the API key is not set.
+        Exception: If any error occurs during the search.
+    """
+    # Check if the API key is set
+    if os.environ["TAVILY_API_KEY"] is None:
+        raise ValueError("Web search cannot be performed at this time.")
+    
+    try:
+        # Initialize the search tool with the specified parameters
+        search = TavilySearchResults(
+            max_results=max_results,
+            include_images=include_images
+        )
+
+        # Perform the search and get the results
+        search_results = search.invoke(input=search_quary)
+    except Exception as e:
+        # Raise any exception encountered during the search
+        raise Exception(e)
 
     return search_results
