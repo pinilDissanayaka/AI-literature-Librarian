@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from langchain_community.tools import TavilySearchResults
+from langchain_community.document_loaders import WebBaseLoader
 from langchain.tools import tool
 
 load_dotenv(find_dotenv(filename=".env"))
