@@ -20,7 +20,9 @@ def load_config(config_path="config.yml")->dict:
         return config_file
     except FileNotFoundError as fileNotFoundError:
         # The file is not found
-        raise FileNotFoundError(f"Failed to find the config file at {config_path}")
+        raise FileNotFoundError(f"Failed to find the config file at {config_path}, 
+                                {fileNotFoundError.args}")
     except yaml.YAMLError as yamlError:
         # The file is not a valid YAML file
-        raise ValueError(f"Failed to parse the config file at {config_path}")
+        raise ValueError(f"Failed to parse the config file at {config_path},
+                         {yamlError.args}")
